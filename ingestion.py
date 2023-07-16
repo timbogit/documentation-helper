@@ -1,18 +1,22 @@
 import os
+
 from langchain.document_loaders import ReadTheDocsLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import Pinecone
+from dotenv import load_dotenv
+load_dotenv()
+
 import pinecone
 
 pinecone.init(
     api_key=os.environ["PINECONE_API_KEY"],
-    environment=os.environ["PINECONE_ENVIRONMENT_REGION"],
+    environment=os.environ["PINECONE_ENVIRONMENT"],
 )
 
 
 def ingest_docs() -> None:
-    loader = ReadTheDocsLoader(path="langchain-docs/langchain.readthedocs.io/en/latest")
+    loader = ReadTheDocsLoader(path="langchain-docs/api.python.langchain.com/en/latest")
     raw_documents = loader.load()
     print(f"loaded {len(raw_documents) }documents")
     text_splitter = RecursiveCharacterTextSplitter(
